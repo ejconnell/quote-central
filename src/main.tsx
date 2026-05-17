@@ -1,11 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
-import { Amplify } from "aws-amplify";
-import outputs from "../amplify_outputs.json";
 import { AuthProvider } from "react-oidc-context";
-
-Amplify.configure(outputs);
 
 const remoteCognitoAuthConfig = {
   authority: "https://cognito-idp.ap-southeast-2.amazonaws.com/ap-southeast-2_VQ0eXINVn",
