@@ -239,6 +239,8 @@ function Items({items, materials, metals, standardSetups, inHouses, outsourcings
     <br/>
     <label>{L10n.gram.chinese}/{L10n.unit.chinese}Grams per unit: {itemModel.gramsPerUnit.toFixed(4)}</label>
     <br/>
+    <label>{L10n.gram.chinese}/{L10n.unit.chinese}{L10n.included.chinese}{L10n.wastage.chinese} Grams per unit including wastage: {itemModel.gramsPerUnitIncludingWastage.toFixed(4)}</label>
+    <br/>
 
     <ItemInHouses
       inHouses={inHouses}

@@ -10,6 +10,7 @@ import { IInHouse, IItemInHouse, IItemOutsourcing, IItemOverheadRange, IItemSetu
 
 export class ItemModel {
   gramsPerUnit: number;
+  gramsPerUnitIncludingWastage: number;
   materialCostPerUnit: number;
   inHouseCostPerUnit: number;
   outsourcingCostPerUnit: number;
@@ -27,9 +28,11 @@ export class ItemModel {
     const itemInHousesModel = new ItemInHousesModel(inHouses, itemInHouses, this.latheCostPerThousand);
     const itemOutsourcingsModel = new ItemOutsourcingsModel(outsourcings, itemOutsourcings, unitQuantity);
     const itemWastageModel = new ItemWastageModel(itemWastageRanges, unitQuantity);
+    const lowQuantityItemWastageModel = new ItemWastageModel(itemWastageRanges, 1 /* single unit */);
     const itemSetupsModel = new ItemSetupsModel(itemSetups, unitQuantity);
     const itemOverheadModel = new ItemOverheadModel(itemOverheadRanges, unitQuantity);
     this.gramsPerUnit = unitLength === "" ? Number.NaN : Number(unitLength) * materialModel.weightPerMm;
+    this.gramsPerUnitIncludingWastage = this.gramsPerUnit * (1 + lowQuantityItemWastageModel.value / 100);
     this.materialCostPerUnit = this.gramsPerUnit * materialModel.effectiveCost / 1000;
     this.inHouseCostPerUnit = itemInHousesModel.totalCostPerUnit;
     this.outsourcingCostPerUnit = itemOutsourcingsModel.totalCostPerUnit;

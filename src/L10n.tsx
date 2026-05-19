@@ -60,6 +60,9 @@ const L10n: Record<string, L10nEntry> = {
   laborIncluded: {
     chinese: "單價含費用(3%)",
   },
+  setup: {
+    chinese: "校車費用",
+  },
   setupCost: {
     chinese: "總校車費用",
   },
@@ -77,6 +80,9 @@ const L10n: Record<string, L10nEntry> = {
   },
   profitIncluded: {
     chinese: "單價含利潤(6%)",
+  },
+  included: {
+    chinese: "包括",
   },
   add: {
     chinese: "新增",

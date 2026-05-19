@@ -12,7 +12,9 @@ import StandardSetups from './StandardSetups.tsx';
 import Customers from "./Customers.tsx";
 import { ITabLabel, TabLabels } from "./TabLabels.tsx";
 
-import { fromCognitoIdentityPool } from "@aws-sdk/credential-providers";
+// importing from @aws-sdk/credential-provider-cognito-identity instead of @aws-sdk/credential-providers because the latter causes loading errors in Vite.
+// import { fromCognitoIdentityPool } from "@aws-sdk/credential-providers";
+import { fromCognitoIdentityPool } from "@aws-sdk/credential-provider-cognito-identity";
 
 const log = (msg: string) => console.log(`[MyTabs] ${msg}`);
 

@@ -166,7 +166,7 @@ function ItemSetups({standardSetups, itemSetups, exampleUnitQuantity, setItemSet
 
   return (
    <>
-    <h4>Setup:</h4>
+    <h4>{L10n.setup.chinese} Setup:</h4>
     <p>{L10n.exampleUnitQuantity.chinese} Example unit quantity: {exampleUnitQuantity || 0} &rarr; {L10n.costPerUnit.chinese} Cost per unit: {isModel.totalCostPerUnit.toFixed(2)}</p>
     <Table bordered striped>
       <thead>

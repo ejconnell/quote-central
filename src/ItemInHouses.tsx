@@ -128,7 +128,7 @@ function ItemInHouses({inHouses, itemInHouses, metalName, latheCostPerThousand, 
 
   return (
    <>
-    <h4>In House:</h4>
+    <h4>{L10n.inHouse.chinese} In House:</h4>
     <Table bordered striped>
       <thead>
         <tr>
