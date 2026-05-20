@@ -145,6 +145,7 @@ function MyTabs() {
   const [quotes, setQuotes] = useState<Array<IQuote>>([]);
 
   const auth = useAuth();
+  const email = auth.user?.profile.email || "unknown";
 
   const client = new DynamoDBClient({
     region: "ap-southeast-2",
@@ -368,6 +369,7 @@ function MyTabs() {
           outsourcings={outsourcings}
           customers={customers}
           saveQuote={saveQuote}
+          email={email}
         />
       </Tab>
       <Tab eventKey="items" title={tabTitle(TabLabels.item)}>
@@ -443,6 +445,9 @@ function MyTabs() {
           saveCustomer={saveCustomer}
           deleteCustomer={deleteCustomer}
         />
+      </Tab>
+      <Tab title={`你好 Hello ${email}`}>
+          <></>
       </Tab>
     </Tabs>
   </>);

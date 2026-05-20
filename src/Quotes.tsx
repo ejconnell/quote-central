@@ -7,6 +7,8 @@ import { TabLabels } from "./TabLabels";
 import { ICustomer, IInHouse, IItem, IMaterial, IMetal, IOutsourcing, IQuote, IQuoteItem, IQuoteItemModelResult } from "./Types";
 import { blankItem } from "./Items";
 
+const DEFAULT_CREATED_BY = "chilienyang@gmail.com";
+
 function blankQuoteItem() {
   return {
     key: crypto.randomUUID(),
@@ -75,11 +77,12 @@ class QuoteItemModel {
   }
 }
 
-function Quotes({quotes, items, materials, metals, inHouses, outsourcings, customers, saveQuote}: {quotes: IQuote[], items: IItem[], materials: IMaterial[], metals: IMetal[], inHouses: IInHouse[], outsourcings: IOutsourcing[], customers: ICustomer[], saveQuote: (quote: IQuote) => void}) {
+function Quotes({quotes, items, materials, metals, inHouses, outsourcings, customers, saveQuote, email}: {quotes: IQuote[], items: IItem[], materials: IMaterial[], metals: IMetal[], inHouses: IInHouse[], outsourcings: IOutsourcing[], customers: ICustomer[], saveQuote: (quote: IQuote) => void, email: string}) {
   const [customerName, setCustomerName] = useState("");
   const [quoteItems, setQuoteItems] = useState<IQuoteItem[]>([blankQuoteItem()]);
   const [fixedCustomerName, setFixedCustomerName] = useState("");
   const [fixedTimestamp, setFixedTimestamp] = useState<number>(0);
+  const [fixedCreatedBy, setFixedCreatedBy] = useState("");
   const [fixedQuoteItems, setFixedQuoteItems] = useState<IQuoteItem[]>([]);
   const [quoteItemsModelResults, setQuoteItemsModelResults] = useState<IQuoteItemModelResult[]>([]);
 
@@ -114,6 +117,7 @@ function Quotes({quotes, items, materials, metals, inHouses, outsourcings, custo
     const quote = {
       customerName: customerName,
       timestamp: Date.now(),
+      createdBy: email,
       quoteItems: quoteItems,
       quoteItemsModelResults: quoteItemsModels.map(qim => qim.results()),
     };
@@ -126,6 +130,7 @@ function Quotes({quotes, items, materials, metals, inHouses, outsourcings, custo
     setQuoteItems(quote.quoteItems);
     setFixedCustomerName(quote.customerName);
     setFixedTimestamp(quote.timestamp);
+    setFixedCreatedBy(quote.createdBy || DEFAULT_CREATED_BY);
     setFixedQuoteItems(quote.quoteItems);
     setQuoteItemsModelResults(quote.quoteItemsModelResults);
   }
@@ -232,6 +237,7 @@ function Quotes({quotes, items, materials, metals, inHouses, outsourcings, custo
   function handleHideLoadedQuote() {
     setFixedCustomerName("");
     setFixedTimestamp(0);
+    setFixedCreatedBy("");
     setFixedQuoteItems([]);
     setQuoteItemsModelResults([]);
   };
@@ -240,6 +246,8 @@ function Quotes({quotes, items, materials, metals, inHouses, outsourcings, custo
     <label>{L10n.customer.chinese} Customer Name: {fixedCustomerName}</label>
     <br/>
     <label>{L10n.createdAt.chinese} Created at: {(new Date(fixedTimestamp)).toLocaleString()}</label>
+    <br/>
+    <label>{L10n.createdBy.chinese} Created by: {fixedCreatedBy || DEFAULT_CREATED_BY}</label>
     <br/>
     <button type="button" onClick={handleHideLoadedQuote}>{L10n.hideLoadedQuote.chinese} Hide Loaded Quote</button>
 
@@ -269,6 +277,7 @@ function Quotes({quotes, items, materials, metals, inHouses, outsourcings, custo
       <tr key={q.customerName + q.timestamp}>
         <td>{q.customerName}</td>
         <td>{(new Date(q.timestamp)).toLocaleString()}</td>
+        <td>{q.createdBy || DEFAULT_CREATED_BY}</td>
         <td>{summary}</td>
         <td><button type="button" onClick={() => handleLoadQuote(i)}>{L10n.load.chinese} Load</button></td>
       </tr>
@@ -313,6 +322,7 @@ function Quotes({quotes, items, materials, metals, inHouses, outsourcings, custo
         <tr>
           <th>{L10n.customer.chinese} Customer name</th>
           <th>{L10n.timestamp.chinese} Timestamp</th>
+          <th>{L10n.createdBy.chinese} Created by</th>
           <th>{L10n.summary.chinese} Summary</th>
           <th>{L10n.load.chinese} Load</th>
         </tr>

@@ -99,6 +99,7 @@ export interface IItemOutsourcingModelRow {
 export interface IQuote {
   customerName: string;
   timestamp: number;
+  createdBy?: string;
   quoteItems: IQuoteItem[];
   quoteItemsModelResults: IQuoteItemModelResult[];
 }

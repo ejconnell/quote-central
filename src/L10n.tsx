@@ -207,6 +207,9 @@ const L10n: Record<string, L10nEntry> = {
   deleteIfUnused: {
     chinese: "如果未使用則刪除",
   },
+  createdBy: {
+    chinese: "建立者",
+  },
 }
 
 export default L10n;
