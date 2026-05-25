@@ -7,8 +7,6 @@ import { TabLabels } from "./TabLabels";
 import { ICustomer, IInHouse, IItem, IMaterial, IMetal, IOutsourcing, IQuote, IQuoteItem, IQuoteItemModelResult } from "./Types";
 import { blankItem } from "./Items";
 
-const DEFAULT_CREATED_BY = "chilienyang@gmail.com";
-
 function blankQuoteItem() {
   return {
     key: crypto.randomUUID(),
@@ -130,7 +128,7 @@ function Quotes({quotes, items, materials, metals, inHouses, outsourcings, custo
     setQuoteItems(quote.quoteItems);
     setFixedCustomerName(quote.customerName);
     setFixedTimestamp(quote.timestamp);
-    setFixedCreatedBy(quote.createdBy || DEFAULT_CREATED_BY);
+    setFixedCreatedBy(quote.createdBy);
     setFixedQuoteItems(quote.quoteItems);
     setQuoteItemsModelResults(quote.quoteItemsModelResults);
   }
@@ -247,7 +245,7 @@ function Quotes({quotes, items, materials, metals, inHouses, outsourcings, custo
     <br/>
     <label>{L10n.createdAt.chinese} Created at: {(new Date(fixedTimestamp)).toLocaleString()}</label>
     <br/>
-    <label>{L10n.createdBy.chinese} Created by: {fixedCreatedBy || DEFAULT_CREATED_BY}</label>
+    <label>{L10n.createdBy.chinese} Created by: {fixedCreatedBy}</label>
     <br/>
     <button type="button" onClick={handleHideLoadedQuote}>{L10n.hideLoadedQuote.chinese} Hide Loaded Quote</button>
 
@@ -277,7 +275,7 @@ function Quotes({quotes, items, materials, metals, inHouses, outsourcings, custo
       <tr key={q.customerName + q.timestamp}>
         <td>{q.customerName}</td>
         <td>{(new Date(q.timestamp)).toLocaleString()}</td>
-        <td>{q.createdBy || DEFAULT_CREATED_BY}</td>
+        <td>{q.createdBy}</td>
         <td>{summary}</td>
         <td><button type="button" onClick={() => handleLoadQuote(i)}>{L10n.load.chinese} Load</button></td>
       </tr>

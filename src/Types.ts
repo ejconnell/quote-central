@@ -42,6 +42,9 @@ export interface ICustomer {
 
 export interface IItem {
   name: string;
+  createdBy: string;
+  timestamp: number;
+  version: number;
   customerName: string;
   materialName: string;
   unitLength: string;
@@ -99,7 +102,7 @@ export interface IItemOutsourcingModelRow {
 export interface IQuote {
   customerName: string;
   timestamp: number;
-  createdBy?: string;
+  createdBy: string;
   quoteItems: IQuoteItem[];
   quoteItemsModelResults: IQuoteItemModelResult[];
 }

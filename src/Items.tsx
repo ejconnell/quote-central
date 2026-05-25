@@ -18,6 +18,9 @@ import { ICustomer, IInHouse, IItem, IItemInHouse, IItemOutsourcing, IItemOverhe
 export function blankItem(): IItem {
   return {
     name: "",
+    createdBy: "",
+    timestamp: 0,
+    version: 1,
     customerName: "",
     materialName: "",
     unitLength: "",
@@ -29,17 +32,52 @@ export function blankItem(): IItem {
   };
 }
 
-function Items({items, materials, metals, standardSetups, inHouses, outsourcings, customers, quotes, saveItem, deleteItem}: {items: IItem[], materials: IMaterial[], metals: IMetal[], standardSetups: IStandardSetup[], inHouses: IInHouse[], outsourcings: IOutsourcing[], customers: ICustomer[], quotes: IQuote[], saveItem: (item: IItem) => void, deleteItem: (name: string) => void}) {
+type ItemsProps = {
+  items: IItem[];
+  itemVersions: { [itemName: string]: IItem[] };
+  materials: IMaterial[];
+  metals: IMetal[];
+  standardSetups: IStandardSetup[];
+  inHouses: IInHouse[];
+  outsourcings: IOutsourcing[];
+  customers: ICustomer[];
+  quotes: IQuote[];
+  saveItem: (item: IItem) => void;
+  deleteItem: (name: string) => void;
+  saveItemVersion: (item: IItem) => void;
+  email: string;
+};
+
+function Items({
+  items,
+  itemVersions,
+  materials,
+  metals,
+  standardSetups,
+  inHouses,
+  outsourcings,
+  customers,
+  quotes,
+  saveItem,
+  deleteItem,
+  saveItemVersion,
+  email,
+}: ItemsProps) {
   const [exampleUnitQuantity, setExampleUnitQuantity] = useState<string>("1000");
   const [customerName, setCustomerName] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [materialName, setMaterialName] = useState<string>("");
   const [unitLength, setUnitLength] = useState<string>("");
+  const [createdBy, setCreatedBy] = useState<string>(email);
+  const [timestamp, setTimestamp] = useState<number>(Date.now());
+  const [version, setVersion] = useState<number>(1);
   const [itemSetups, setItemSetups] = useState<IItemSetup[]>([]);
   const [itemInHouses, setItemInHouses] = useState<IItemInHouse[]>([]);
   const [itemWastageRanges, setItemWastageRanges] = useState<IItemWastageRange[]>([ItemWastageInitialRange()]);
   const [itemOverheadRanges, setItemOverheadRanges] = useState<IItemOverheadRange[]>([ItemOverheadInitialRange()]);
   const [itemOutsourcings, setItemOutsourcings] = useState<IItemOutsourcing[]>([]);
+
+  const ivItems = itemVersions[name] || [];
 
   let quoteCounts: { [key: string]: number } = {};
   quotes.forEach(q => {
@@ -69,6 +107,14 @@ function Items({items, materials, metals, standardSetups, inHouses, outsourcings
   });
 
   const itemsModels = items.map(item => {
+    return new ItemModel({
+       ...lookupTables,
+       ...item,
+       unitQuantity: Number(exampleUnitQuantity),
+    });
+  });
+
+  const ivItemsModels = ivItems.map(item => {
     return new ItemModel({
        ...lookupTables,
        ...item,
@@ -115,8 +161,13 @@ function Items({items, materials, metals, standardSetups, inHouses, outsourcings
       return;
     }
 
+    const nextVersion = ivItems ? Math.max(...ivItems.map(iv => iv.version)) + 1 : 1;
+
     const item = {
       name: name,
+      createdBy: email,
+      timestamp: Date.now(),
+      version: nextVersion,
       customerName: customerName,
       materialName: materialName,
       unitLength: unitLength,
@@ -127,20 +178,84 @@ function Items({items, materials, metals, standardSetups, inHouses, outsourcings
       itemOutsourcings: itemOutsourcings,
     };
     saveItem(item);
+    saveItemVersion(item);
   }
 
-  function handleLoadItem(index: number) {
-    const item = items[index];
+  function _handleLoadItem(item: IItem) {
     setName(item.name);
     setCustomerName(item.customerName || "");
     setMaterialName(item.materialName);
     setUnitLength(item.unitLength);
+    setCreatedBy(item.createdBy);
+    setTimestamp(item.timestamp);
+    setVersion(item.version);
     setItemSetups(item.itemSetups);
     setItemInHouses(item.itemInHouses);
     setItemWastageRanges(item.itemWastageRanges);
     setItemOverheadRanges(item.itemOverheadRanges);
     setItemOutsourcings(item.itemOutsourcings);
   }
+
+  function handleLoadItem(index: number) {
+    const item = items[index];
+    _handleLoadItem(item);
+  }
+
+  function handleLoadItemVersion(version: number) {
+    const item = ivItems?.find(iv => iv.version === version);
+    if (!item) {
+      alert(`Could not find item version ${version}`);
+      return;
+    }
+    _handleLoadItem(item);
+  }
+
+  const itemVersionRowsFrag = ivItems?.map((ivItem, i) => {
+    return <tr key={ivItem.timestamp}>
+      <td>{ivItem.name}</td>
+      <td>{ivItem.customerName}</td>
+      <td>{ivItem.materialName}</td>
+      <td>{ivItemsModels[i].materialCostPerUnit.toFixed(2)}</td>
+      <td>{ivItemsModels[i].inHouseCostPerUnit.toFixed(2)}</td>
+      <td>{ivItemsModels[i].outsourcingCostPerUnit.toFixed(2)}</td>
+      <td>{ivItemsModels[i].wastagePercent.toFixed(2)}</td>
+      <td>{ivItemsModels[i].setupCostPerUnit.toFixed(2)}</td>
+      <td>{ivItemsModels[i].overheadPercent.toFixed(2)}</td>
+
+      <td>{ivItem.version}</td>
+      <td>{ivItem.createdBy}</td>
+      <td>{new Date(ivItem.timestamp).toLocaleString()}</td>
+      <td><button type="button" onClick={() => handleLoadItemVersion(ivItem.version)}>
+        {L10n.load.chinese}Load
+      </button></td>
+    </tr>
+  });
+
+  const allItemVersionsFrag = (<>
+      <h3>Item Version Listing</h3>
+      <Table bordered striped>
+        <thead>
+          <tr>
+            <th>{L10n.name.chinese} Name</th>
+            <th>{L10n.customer.chinese}{L10n.name.chinese} Customer name</th>
+            <th>{L10n.material.chinese}{L10n.name.chinese} Material name</th>
+            <th>{L10n.material.chinese}{L10n.cost.chinese} Material cost</th>
+            <th>{L10n.inHouse.chinese}{L10n.cost.chinese} In House cost</th>
+            <th>{L10n.outsourcing.chinese}{L10n.cost.chinese} Outsourcing cost</th>
+            <th>{L10n.wastage.chinese} Wastage percent</th>
+            <th>{L10n.setupCost.chinese} Setup cost</th>
+            <th>{L10n.overhead.chinese} Overhead percent</th>
+            <th>{L10n.version.chinese} Version</th>
+            <th>{L10n.createdBy.chinese} Created by</th>
+            <th>{L10n.timestamp.chinese} Created at</th>
+            <th>{L10n.load.chinese} Load</th>
+          </tr>
+        </thead>
+        <tbody>
+          {itemVersionRowsFrag}
+        </tbody>
+      </Table>
+    </>);
 
   const itemRowsFrag = items.map((item, i) => {
     const deleteItemButton = <button type="button" onClick={() => deleteItem(item.name)}>{L10n.delete.chinese} Delete</button>
@@ -218,7 +333,14 @@ function Items({items, materials, metals, standardSetups, inHouses, outsourcings
       <option value="" key="blank"></option>;
       {customerSelectOptions}
     </select>
+    <br/>
 
+    <label>{L10n.createdBy.chinese} Created by: {createdBy}</label>
+    <br/>
+    <label>{L10n.timestamp.chinese} Created at: {new Date(timestamp).toLocaleString()}</label>
+    <br/>
+    <label>{L10n.version.chinese} Version: {version}</label>
+    <br/>
 
     <h4>{L10n.material.chinese} Material:</h4>
     <select
@@ -282,6 +404,11 @@ function Items({items, materials, metals, standardSetups, inHouses, outsourcings
     <button type="submit" onClick={handleSaveItem}>
       {L10n.save.chinese}{L10n.item.chinese} Save Item
     </button>
+
+    <br/>
+    <br/>
+    { allItemVersionsFrag }
+
   </>);
 
   const importerInstructionsText = `This importer works for a single item at a time.

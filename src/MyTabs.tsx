@@ -75,6 +75,36 @@ async function loadItems(
   await loadTable(ddbDocClient, setItems, "Items");
 };
 
+async function loadItemVersions(
+  ddbDocClient: DynamoDBDocumentClient,
+  setItemVersions: (itemVersions: { [itemName: string]: IItem[] }) => void
+) {
+  const paginatedScan = paginateScan(
+    { client: ddbDocClient },
+    {
+      TableName: "ItemVersions",
+      ConsistentRead: true,
+    },
+  );
+  const acc: { [itemName: string]: IItem[] } = {};
+  for await (const page of paginatedScan) {
+    for (const item of page.Items as IItem[]) {
+      if (!acc[item.name]) {
+        acc[item.name] = [];
+      }
+      acc[item.name].push(item);
+    }
+  }
+  function sortByVersion(a: IItem, b: IItem): number {
+    return b.version - a.version;
+  }
+  // Sort each item's versions by version
+  for (const itemName in acc) {
+    acc[itemName].sort(sortByVersion);
+  }
+  setItemVersions(acc);
+};
+
 async function loadCustomers(
   ddbDocClient: DynamoDBDocumentClient,
   setCustomers: (customers: ICustomer[]) => void
@@ -133,7 +163,7 @@ function getAwsCreds(auth: AuthContextProps) {
 
 
 function MyTabs() {
-  const [loadsComplete, setFetchesComplete] = useState<boolean>(false);
+  const [loadsComplete, setLoadsComplete] = useState<boolean>(false);
   const [customers, setCustomers] = useState<Array<ICustomer>>([]);
   const [materials, setMaterials] = useState<Array<IMaterial>>([]);
   const [metals, setMetals] = useState<Array<IMetal>>([]);
@@ -142,6 +172,7 @@ function MyTabs() {
   const [inHouses, setInHouses] = useState<Array<IInHouse>>([]);
   const [outsourcings, setOutsourcings] = useState<Array<IOutsourcing>>([]);
   const [items, setItems] = useState<Array<IItem>>([]);
+  const [itemVersions, setItemVersions] = useState<{ [itemName: string]: IItem[] }>({});
   const [quotes, setQuotes] = useState<Array<IQuote>>([]);
 
   const auth = useAuth();
@@ -163,8 +194,9 @@ function MyTabs() {
       loadInHouses(ddbDocClient, setInHouses),
       loadOutsourcings(ddbDocClient, setOutsourcings),
       loadItems(ddbDocClient, setItems),
+      loadItemVersions(ddbDocClient, setItemVersions),
       loadQuotes(ddbDocClient, setQuotes),
-    ]).then(() => setFetchesComplete(true));
+    ]).then(() => setLoadsComplete(true));
   }, [])
 
   async function saveMetalFamily(metalFamily: IMetalFamily) {
@@ -337,6 +369,30 @@ function MyTabs() {
     loadItems(ddbDocClient, setItems);
   }
 
+  async function saveItemVersion(item: IItem) {
+    log("saveItemVersion() " + item.name)
+    const response = await ddbDocClient.send(new PutCommand({
+      TableName: "ItemVersions",
+      Item: item,
+    }));
+    log(JSON.stringify(response));
+    loadItemVersions(ddbDocClient, setItemVersions);
+  }
+
+  /*
+  async function deleteItemVersion(name: string, version: number) {
+    const response = await ddbDocClient.send(new DeleteCommand({
+      TableName: "Items",
+      Key: {
+        name: name,
+        version: version,
+      },
+    }));
+    log(JSON.stringify(response));
+    loadItems(ddbDocClient, setItems);
+  }
+  */
+
   async function saveQuote(quote: IQuote) {
     log(`saveQuote() ${quote.customerName} - ${quote.timestamp}`);
     const response = await ddbDocClient.send(new PutCommand({
@@ -375,6 +431,7 @@ function MyTabs() {
       <Tab eventKey="items" title={tabTitle(TabLabels.item)}>
         <Items
           items={items}
+          itemVersions={itemVersions}
           materials={materials}
           metals={metals}
           standardSetups={standardSetups}
@@ -384,6 +441,8 @@ function MyTabs() {
           quotes={quotes}
           saveItem={saveItem}
           deleteItem={deleteItem}
+          saveItemVersion={saveItemVersion}
+          email={email}
         />
       </Tab>
       <Tab eventKey="materials" title={tabTitle(TabLabels.material)}>

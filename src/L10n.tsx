@@ -210,6 +210,9 @@ const L10n: Record<string, L10nEntry> = {
   createdBy: {
     chinese: "建立者",
   },
+  version: {
+    chinese: "版本",
+  },
 }
 
 export default L10n;
