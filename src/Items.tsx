@@ -15,6 +15,9 @@ import { ItemWastageInitialRange } from "./ItemWastage"
 import { ItemOverheadInitialRange } from "./ItemOverhead"
 import { ItemModel } from "./ItemModel";
 import { ICustomer, IInHouse, IItem, IItemInHouse, IItemOutsourcing, IItemOverheadRange, IItemSetup, IItemWastageRange, IMaterial, IMetal, IOutsourcing, IQuote, IStandardSetup } from "./Types";
+import { makeLogger } from "./utils/logger";
+
+const log = makeLogger("Items");
 
 
 export function blankItem(): IItem {
@@ -125,7 +128,7 @@ function Items({
   });
 
   function handleSaveItem() {
-    console.log("handleSaveItem()");
+    log("handleSaveItem()");
     if (!customerName) {
       alert("Need a customer name");
       return;
@@ -436,7 +439,7 @@ whole thing here.
       doAlert(`Import aborted. Expected exactly 46 rows but got ${grid.length}`);
       return;
     }
-    console.log(grid);
+    log(grid);
     function doAlert(str: string) {
       if (numErrors < MaxErrors) {
         if (numErrors < MaxErrors - 1) {

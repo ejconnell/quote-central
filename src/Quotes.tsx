@@ -6,6 +6,9 @@ import L10n from "./L10n";
 import { TabLabels } from "./TabLabels";
 import { ICustomer, IInHouse, IItem, IMaterial, IMetal, IOutsourcing, IQuote, IQuoteItem, IQuoteItemModelResult } from "./Types";
 import { blankItem } from "./Items";
+import { makeLogger } from "./utils/logger";
+
+const log = makeLogger("Quotes");
 
 function blankQuoteItem() {
   return {
@@ -134,7 +137,7 @@ function Quotes({quotes, items, materials, metals, inHouses, outsourcings, custo
   }
 
   function handleQuoteItemNameChange(value: string, index: number) {
-    console.log(`handleQuoteItemNameChange(${value}, ${index})`);
+    log(`handleQuoteItemNameChange(${value}, ${index})`);
     const nextQuoteItems = quoteItems.map((qi, i) => {
       if (i === index) {
         return {
@@ -146,12 +149,12 @@ function Quotes({quotes, items, materials, metals, inHouses, outsourcings, custo
         return {...qi};
       }
     });
-    console.log(JSON.stringify(nextQuoteItems));
+    log(JSON.stringify(nextQuoteItems));
     setQuoteItems(nextQuoteItems);
   }
 
   function handleQuoteItemQuantityChange(value: string, index: number) {
-    console.log(`handleQuoteItemQuantityChange(${value}, ${index})`);
+    log(`handleQuoteItemQuantityChange(${value}, ${index})`);
     const nextQuoteItems: IQuoteItem[] = quoteItems.map((qi, i) => {
       if (i === index) {
         return {
@@ -163,18 +166,18 @@ function Quotes({quotes, items, materials, metals, inHouses, outsourcings, custo
         return {...qi};
       }
     });
-    console.log(`handleQuoteItemQuantityChange setting to ${JSON.stringify(nextQuoteItems)}`);
+    log(`handleQuoteItemQuantityChange setting to ${JSON.stringify(nextQuoteItems)}`);
     setQuoteItems(nextQuoteItems);
   }
 
   function addQuoteItem(index: number) {
-    console.log(`addQuoteItem(${index})`);
+    log(`addQuoteItem(${index})`);
     const nextQuoteItems: IQuoteItem[] = [
       ...quoteItems.slice(0, index+1),
       blankQuoteItem(),
       ...quoteItems.slice(index+1),
     ];
-    console.log(JSON.stringify(nextQuoteItems));
+    log(JSON.stringify(nextQuoteItems));
     setQuoteItems(nextQuoteItems);
   }
 

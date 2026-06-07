@@ -8,6 +8,7 @@ import {
   paginateScan,
   PutCommand,
 } from "@aws-sdk/lib-dynamodb";
+import { makeLogger } from "./utils/logger";
 import { AuthContextProps } from "react-oidc-context";
 import {
   ICustomer,
@@ -22,7 +23,7 @@ import {
   IStandardSetup,
 } from "./Types";
 
-const log = (msg: string) => console.log(`[dynamo] ${msg}`);
+const log = makeLogger("dynamo");
 
 interface HasName {
   name: string;
