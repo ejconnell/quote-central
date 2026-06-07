@@ -21,7 +21,7 @@ const localhostCognitoAuthConfig: AuthProviderProps = {
 
 const cognitoAuthConfig = window.location.hostname === "localhost" ? localhostCognitoAuthConfig : remoteCognitoAuthConfig;
 
-cognitoAuthConfig.onSigninCallback = (_user) => {
+cognitoAuthConfig.onSigninCallback = () => {
     window.history.replaceState(
       {},
       document.title,

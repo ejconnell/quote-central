@@ -35,7 +35,7 @@ function ItemInHouses({inHouses, itemInHouses, metalName, latheCostPerThousand, 
         }
       } else {
         return {...iih};
-      };
+      }
     });
     setItemInHouses(nextItemInHouses);
   }
@@ -50,7 +50,7 @@ function ItemInHouses({inHouses, itemInHouses, metalName, latheCostPerThousand, 
         }
       } else {
         return {...iih};
-      };
+      }
     });
     setItemInHouses(nextItemInHouses);
   }
@@ -91,7 +91,7 @@ function ItemInHouses({inHouses, itemInHouses, metalName, latheCostPerThousand, 
         {inHousesSelectOptions}
       </select>
     </>;
-  };
+  }
 
   const itemInHousesRowsFrag = itemInHouses.map((iih, i) => {
     return <tr key={iih.key}>

@@ -13,13 +13,13 @@ function blankQuoteItem() {
     name: "",
     quantity: "",
   };
-};
+}
 
 class QuoteItemModel {
   materialCostPerUnit: number;
-  inHouseCostPerUnit: any;
-  outsourcingCostPerUnit: any;
-  baseCostPerUnit: any;
+  inHouseCostPerUnit: number;
+  outsourcingCostPerUnit: number;
+  baseCostPerUnit: number;
   wastagePercent: number;
   postWastageCostPerUnit: number;
   postLaborCostPerUnit: number;
@@ -144,7 +144,7 @@ function Quotes({quotes, items, materials, metals, inHouses, outsourcings, custo
         }
       } else {
         return {...qi};
-      };
+      }
     });
     console.log(JSON.stringify(nextQuoteItems));
     setQuoteItems(nextQuoteItems);
@@ -161,7 +161,7 @@ function Quotes({quotes, items, materials, metals, inHouses, outsourcings, custo
         }
       } else {
         return {...qi};
-      };
+      }
     });
     console.log(`handleQuoteItemQuantityChange setting to ${JSON.stringify(nextQuoteItems)}`);
     setQuoteItems(nextQuoteItems);
@@ -238,7 +238,7 @@ function Quotes({quotes, items, materials, metals, inHouses, outsourcings, custo
     setFixedCreatedBy("");
     setFixedQuoteItems([]);
     setQuoteItemsModelResults([]);
-  };
+  }
 
   const loadedQuoteSectionFrag = <>
     <label>{L10n.customer.chinese} Customer Name: {fixedCustomerName}</label>

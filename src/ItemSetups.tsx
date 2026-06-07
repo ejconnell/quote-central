@@ -7,7 +7,7 @@ export class ItemSetupsModel {
   totalCostPerUnit: number;
   constructor(itemSetups: IItemSetup[], unitQuantity: number) {
     this.totalCostPerJob = itemSetups.map(s => Number(s.costPerJob)).reduce((acc, cost) => acc+cost, 0);
-    this.totalCostPerUnit = this.totalCostPerJob / unitQuantity;;
+    this.totalCostPerUnit = this.totalCostPerJob / unitQuantity;
   }
 }
 
@@ -26,7 +26,7 @@ function ItemSetups({standardSetups, itemSetups, exampleUnitQuantity, setItemSet
         }
       } else {
         return {...s};
-      };
+      }
     });
     setItemSetups(nextItemSetups);
   }
@@ -43,7 +43,7 @@ function ItemSetups({standardSetups, itemSetups, exampleUnitQuantity, setItemSet
         }
       } else {
         return {...s};
-      };
+      }
     });
     setItemSetups(nextItemSetups);
   }
@@ -60,7 +60,7 @@ function ItemSetups({standardSetups, itemSetups, exampleUnitQuantity, setItemSet
         }
       } else {
         return {...s};
-      };
+      }
     });
     setItemSetups(nextItemSetups);
   }
@@ -77,7 +77,7 @@ function ItemSetups({standardSetups, itemSetups, exampleUnitQuantity, setItemSet
         }
       } else {
         return {...s};
-      };
+      }
     });
     setItemSetups(nextItemSetups);
   }
@@ -119,7 +119,7 @@ function ItemSetups({standardSetups, itemSetups, exampleUnitQuantity, setItemSet
         {standardSetupsSelectOptions}
       </select>
     );
-  };
+  }
 
   const itemSetupsRowsFrag = itemSetups.map((is, i) => {
     const setupCustomNameInputFrag = <input

@@ -88,7 +88,7 @@ function ItemOutsourcings({outsourcings, itemOutsourcings, exampleUnitQuantity, 
         }
       } else {
         return {...io};
-      };
+      }
     });
     setItemOutsourcings(nextItemOutsourcings);
   }
@@ -103,7 +103,7 @@ function ItemOutsourcings({outsourcings, itemOutsourcings, exampleUnitQuantity, 
         }
       } else {
         return {...io};
-      };
+      }
     });
     setItemOutsourcings(nextItemOutsourcings);
   }

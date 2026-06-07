@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import InHouses from './InHouses.tsx';
@@ -34,46 +34,46 @@ import { IInHouse, IItem, IMaterial, IMetal, IMetalFamily, IOutsourcing, IQuote,
 
 async function loadMetalFamilies(ddbDocClient: DynamoDBDocumentClient, setMetalFamilies: (metalFamilies: IMetalFamily[]) => void) {
   await loadTable(ddbDocClient, setMetalFamilies, "MetalFamilies")
-};
+}
 
 async function loadMetals(ddbDocClient: DynamoDBDocumentClient, setMetals: (metals: IMetal[]) => void) {
   await loadTable(ddbDocClient, setMetals, "Metals")
-};
+}
 
 async function loadMaterials(
   ddbDocClient: DynamoDBDocumentClient,
   setMaterials: (materials: IMaterial[]) => void
 ) {
   await loadTable(ddbDocClient, setMaterials, "Materials");
-};
+}
 
 async function loadStandardSetups(
   ddbDocClient: DynamoDBDocumentClient,
   setStandardSetups: (standardSetups: IStandardSetup[]) => void
 ) {
   await loadTable(ddbDocClient, setStandardSetups, "StandardSetups");
-};
+}
 
 async function loadInHouses(
   ddbDocClient: DynamoDBDocumentClient,
   setInHouses: (inHouses: IInHouse[]) => void
 ) {
   await loadTable(ddbDocClient, setInHouses, "InHouses");
-};
+}
 
 async function loadOutsourcings(
   ddbDocClient: DynamoDBDocumentClient,
   setOutsourcings: (outsourcings: IOutsourcing[]) => void
 ) {
   await loadTable(ddbDocClient, setOutsourcings, "Outsourcings");
-};
+}
 
 async function loadItems(
   ddbDocClient: DynamoDBDocumentClient,
   setItems: (items: IItem[]) => void
 ) {
   await loadTable(ddbDocClient, setItems, "Items");
-};
+}
 
 async function loadItemVersions(
   ddbDocClient: DynamoDBDocumentClient,
@@ -103,14 +103,14 @@ async function loadItemVersions(
     acc[itemName].sort(sortByVersion);
   }
   setItemVersions(acc);
-};
+}
 
 async function loadCustomers(
   ddbDocClient: DynamoDBDocumentClient,
   setCustomers: (customers: ICustomer[]) => void
 ) {
   await loadTable(ddbDocClient, setCustomers, "Customers");
-};
+}
 
 async function loadQuotes(
   ddbDocClient: DynamoDBDocumentClient,
@@ -120,7 +120,7 @@ async function loadQuotes(
     return b.timestamp - a.timestamp;
   }
   await loadTable(ddbDocClient, setQuotes, "Quotes", sortCompare);
-};
+}
 
 interface hasName {
   name: string;
@@ -130,7 +130,7 @@ function nameSortCompare(a: hasName, b: hasName): number {
   return a.name.localeCompare(b.name)
 }
 
-async function loadTable<T>(ddbDocClient: DynamoDBDocumentClient, setter: (things: T[]) => void, tableName: string, sortCompare: (a: any, b: any) => number = nameSortCompare) {
+async function loadTable<T>(ddbDocClient: DynamoDBDocumentClient, setter: (things: T[]) => void, tableName: string, sortCompare?: (a: T, b: T) => number) {
   log(`loadTable("${tableName}")`)
   const paginatedScan = paginateScan(
     { client: ddbDocClient },
@@ -143,7 +143,7 @@ async function loadTable<T>(ddbDocClient: DynamoDBDocumentClient, setter: (thing
   for await (const page of paginatedScan) {
     acc.push(...(page.Items as T[]));
   }
-  acc.sort(sortCompare);
+  acc.sort(sortCompare ?? ((a, b) => nameSortCompare(a as hasName, b as hasName)));
   setter(acc);
 }
 
@@ -178,11 +178,13 @@ function MyTabs() {
   const auth = useAuth();
   const email = auth.user?.profile.email || "unknown";
 
-  const client = new DynamoDBClient({
-    region: "ap-southeast-2",
-    credentials: getAwsCreds(auth),
-  });
-  const ddbDocClient = DynamoDBDocumentClient.from(client);
+  const ddbDocClient = useMemo(() => {
+    const client = new DynamoDBClient({
+      region: "ap-southeast-2",
+      credentials: getAwsCreds(auth),
+    });
+    return DynamoDBDocumentClient.from(client);
+  }, [auth]);
 
   useEffect(() => {
     Promise.all([
@@ -197,7 +199,7 @@ function MyTabs() {
       loadItemVersions(ddbDocClient, setItemVersions),
       loadQuotes(ddbDocClient, setQuotes),
     ]).then(() => setLoadsComplete(true));
-  }, [])
+  }, [ddbDocClient])
 
   async function saveMetalFamily(metalFamily: IMetalFamily) {
     log("saveMetalFamily() " + metalFamily.name)

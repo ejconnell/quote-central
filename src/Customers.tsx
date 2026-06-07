@@ -8,11 +8,11 @@ import { ICustomer, IItem, IQuote } from "./Types";
 function Customers({customers, quotes, items, saveCustomer, deleteCustomer}: {customers: ICustomer[], quotes: IQuote[], items: IItem[], saveCustomer: (customer: ICustomer) => void, deleteCustomer: (name: string) => void}) {
   const [name, setName] = useState<string>("");
 
-  let quoteCounts: { [key: string]: number } = {};
+  const quoteCounts: { [key: string]: number } = {};
   quotes.forEach((quote) => {
     quoteCounts[quote.customerName] = (quoteCounts[quote.customerName] || 0) + 1;
   });
-  let itemCounts: { [key: string]: number } = {};
+  const itemCounts: { [key: string]: number } = {};
   items.forEach((item) => {
     itemCounts[item.customerName] = (itemCounts[item.customerName] || 0) + 1;
   });
@@ -30,7 +30,7 @@ function Customers({customers, quotes, items, saveCustomer, deleteCustomer}: {cu
   function handleLoadCustomer(index: number) {
     const customer = customers[index];
     setName(customer.name);
-  };
+  }
 
   const tableRows = customers.map((customer, i) => {
     const deleteCustomerButton = <button type="button" onClick={() => deleteCustomer(customer.name)}>{L10n.delete.chinese}Delete</button>;

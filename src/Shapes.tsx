@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+
 export interface IShape {
   name: string;
   hasInnerWidth: boolean;
@@ -14,7 +16,7 @@ export const Shapes: IShape[] = [
     abbreviation: "",
     widthLabel: "Diameter",
     chineseWidth: "直徑",
-    area: (width: number, _: number) => Math.PI * width * width / 4,
+    area: (width: number) => Math.PI * width * width / 4,
   },
   {
     name: "圓管 Hollow Cylindrical",
@@ -30,7 +32,7 @@ export const Shapes: IShape[] = [
     abbreviation: "四角",
     widthLabel: "Side",
     chineseWidth: "角",
-    area: (width: number, _: number) => width * width,
+    area: (width: number) => width * width,
   },
   {
     name: "空心四角 Hollow Square",
@@ -46,7 +48,7 @@ export const Shapes: IShape[] = [
     abbreviation: "六角",
     widthLabel: "Side",
     chineseWidth: "角",
-    area: (width: number, _: number) => Math.sqrt(3) / 2 * width * width,
+    area: (width: number) => Math.sqrt(3) / 2 * width * width,
   },
 ];
 

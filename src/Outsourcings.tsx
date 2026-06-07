@@ -15,7 +15,7 @@ function Outsourcings({outsourcings, items, saveOutsourcing, deleteOutsourcing}:
   const variableCostStr = isPricedByUnit ? "unit" : "kilogram";
   const variableCostLabel = isPricedByUnit ? L10n.minCostPerUnit.chinese + "Minimum cost per unit" : L10n.minCostPerKg.chinese + "Minimum cost per kilogram";
 
-  let itemCounts: { [key: string]: number } = {};
+  const itemCounts: { [key: string]: number } = {};
   items.forEach((item) => {
     item.itemOutsourcings.forEach((itemOutsourcing) => {
       itemCounts[itemOutsourcing.name] = (itemCounts[itemOutsourcing.name] || 0) + 1;
@@ -42,7 +42,7 @@ function Outsourcings({outsourcings, items, saveOutsourcing, deleteOutsourcing}:
       minCostPerJob: minCostPerJob,
     };
     saveOutsourcing(outsourcing);
-  };
+  }
 
   function handleLoadOutsourcing(index: number) {
      const os = outsourcings[index];

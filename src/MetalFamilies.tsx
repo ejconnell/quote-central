@@ -8,7 +8,7 @@ import { IMetalFamily, IMetal } from "./Types";
 function MetalFamilies({metalFamilies, metals, saveMetalFamily, deleteMetalFamily}: {metalFamilies: IMetalFamily[], metals: IMetal[], saveMetalFamily: (metalFamily: IMetalFamily) => void, deleteMetalFamily: (name: string) => void}) {
   const [name, setName] = useState<string>("");
 
-  let metalCounts: { [key: string]: number } = {};
+  const metalCounts: { [key: string]: number } = {};
   metals.forEach((metal) => {
     metalCounts[metal.metalFamilyName] = (metalCounts[metal.metalFamilyName] || 0) + 1;
   });
@@ -22,7 +22,7 @@ function MetalFamilies({metalFamilies, metals, saveMetalFamily, deleteMetalFamil
       name: name,
     };
     saveMetalFamily(metalFamily)
-  };
+  }
 
   const mfRowsFrag = metalFamilies.map(mf => {
     const deleteMetalFamilyButton = <button type="button" onClick={() => deleteMetalFamily(mf.name)}>{L10n.delete.chinese}Delete</button>;

@@ -10,7 +10,7 @@ function InHouses({inHouses, items, saveInHouse, deleteInHouse}: {inHouses: IInH
   const [name, setName] = useState<string>("");
   const [cost, setCost] = useState<string>("");
 
-  let itemCounts: { [key: string]: number } = {};
+  const itemCounts: { [key: string]: number } = {};
   items.forEach((item) => {
     item.itemInHouses.forEach((itemInHouse) => {
       itemCounts[itemInHouse.name] = (itemCounts[itemInHouse.name] || 0) + 1;

@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+
 import { useState } from "react";
 import Table from 'react-bootstrap/Table';
 import Importer from "./Importer";
@@ -36,7 +38,7 @@ function Materials({materials, metals, metalFamilies, items, saveMaterial, delet
   const [filterMetalName, setFilterMetalName] = useState<string>("");
   const [filterShapeName, setFilterShapeName] = useState<string>("");
 
-  let itemCounts: { [key: string]: number } = {};
+  const itemCounts: { [key: string]: number } = {};
   items.forEach((item) => {
     itemCounts[item.materialName] = (itemCounts[item.materialName] || 0) + 1;
   });
@@ -121,7 +123,7 @@ function Materials({materials, metals, metalFamilies, items, saveMaterial, delet
       markup: markup,
     };
     saveMaterial(material);
-  };
+  }
 
   function importerProcessorFunc(grid: string[][]) {
     const metalNames = metals.map(m => m.name);
@@ -180,7 +182,7 @@ function Materials({materials, metals, metalFamilies, items, saveMaterial, delet
      setInnerWidth(material.innerWidth);
      setRawCost(material.rawCost);
      setMarkup(material.markup);
-  };
+  }
 
   const tableRows = filteredMaterials.map((m, i) => {
     const deleteMaterialButton = <button type="button" onClick={() => deleteMaterial(m.name)}>{L10n.delete.chinese}Delete</button>;

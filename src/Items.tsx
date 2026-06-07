@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+
 import { useState } from "react";
 import Table from 'react-bootstrap/Table';
 import Importer from "./Importer";
@@ -79,7 +81,7 @@ function Items({
 
   const ivItems = itemVersions[name] || [];
 
-  let quoteCounts: { [key: string]: number } = {};
+  const quoteCounts: { [key: string]: number } = {};
   quotes.forEach(q => {
     q.quoteItems.forEach(qi => {
       quoteCounts[qi.name] = (quoteCounts[qi.name] || 0) + 1;

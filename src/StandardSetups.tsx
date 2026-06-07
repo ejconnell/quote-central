@@ -9,7 +9,7 @@ import { IItem, IStandardSetup } from "./Types";
 function StandardSetups({standardSetups, items, saveStandardSetup, deleteStandardSetup}: {standardSetups: IStandardSetup[], items: IItem[], saveStandardSetup: (standardSetup: IStandardSetup) => void, deleteStandardSetup: (name: string) => void}) {
   const [name, setName] = useState("");
 
-  let itemCounts: { [key: string]: number } = {};
+  const itemCounts: { [key: string]: number } = {};
   items.forEach((item) => {
     item.itemSetups.forEach((itemSetup) => {
       itemSetup.standardName

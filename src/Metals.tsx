@@ -12,7 +12,7 @@ function Metals({metals, metalFamilies, materials, saveMetal, deleteMetal}: {met
   const [density, setDensity] = useState<string>("");
   const [latheCostPerThousand, setLatheCostPerThousand] = useState<string>("");
 
-  let materialCounts: { [key: string]: number } = {};
+  const materialCounts: { [key: string]: number } = {};
   materials.forEach((material) => {
     materialCounts[material.metalName] = (materialCounts[material.metalName] || 0) + 1;
   });
@@ -59,7 +59,7 @@ function Metals({metals, metalFamilies, materials, saveMetal, deleteMetal}: {met
       density: density,
       latheCostPerThousand: latheCostPerThousand,
     })
-  };
+  }
 
   function handleLoadMetal(index: number) {
      const metal = metals[index];
@@ -67,7 +67,7 @@ function Metals({metals, metalFamilies, materials, saveMetal, deleteMetal}: {met
      setMetalFamilyName(metal.metalFamilyName);
      setDensity(metal.density);
      setLatheCostPerThousand(metal.latheCostPerThousand);
-  };
+  }
 
   const tableRows = metals.map((m, i) => {
     const deleteMetalButton = <button type="button" onClick={() => deleteMetal(m.name)}>{L10n.delete.chinese}Delete</button>;

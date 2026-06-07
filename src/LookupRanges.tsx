@@ -37,7 +37,7 @@ function LookupRanges({ranges, quantity, setRanges, title, valueLabel}: {ranges:
         }
       } else {
         return {...iw};
-      };
+      }
     });
     setRanges(nextLookupRanges);
   }
@@ -68,7 +68,7 @@ function LookupRanges({ranges, quantity, setRanges, title, valueLabel}: {ranges:
       }
     }
     setRanges(nextLookupRanges);
-  };
+  }
 
   function handleMergeRanges(isKeepUpper: boolean) {
     if (rangePairSelectIndex === -1) {
@@ -91,7 +91,7 @@ function LookupRanges({ranges, quantity, setRanges, title, valueLabel}: {ranges:
     });
     setRanges(nextLookupRanges);
     setRangePairSelectIndex(Math.min(rangePairSelectIndex, nextLookupRanges.length-2));
-  };
+  }
 
   const rangePairSelectOptions = []
   for (let i = 0; i < ranges.length - 1; i++) {
