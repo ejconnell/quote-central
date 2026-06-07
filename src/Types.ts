@@ -128,3 +128,4 @@ export interface IQuoteItemModelResult {
   postOverheadCostPerUnit: number;
   postProfitCostPerUnit: number;
 }
+export type IItemVersions = { [itemName: string]: IItem[]; };
