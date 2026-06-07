@@ -1,20 +1,20 @@
-## AWS Amplify React+Vite Starter Template
+## Quote Central
 
-This repository provides a starter template for creating applications using React+Vite and AWS Amplify, emphasizing easy setup for authentication, API, and database capabilities.
+React/Vite quoting and costing application for managing customers, materials, metals, in-house work, outsourcing, item versions, and quotes.
 
 ## Overview
 
-This template equips you with a foundational React application integrated with AWS Amplify, streamlined for scalability and performance. It is ideal for developers looking to jumpstart their project with pre-configured AWS services like Cognito, AppSync, and DynamoDB.
+The app is deployed and served by AWS Amplify Hosting. The React code handles the business workflow directly and uses Cognito-authenticated AWS SDK clients as a DynamoDB DAO.
 
 ## Features
 
-- **Authentication**: Setup with Amazon Cognito for secure user authentication.
-- **API**: Ready-to-use GraphQL endpoint with AWS AppSync.
-- **Database**: Real-time database powered by Amazon DynamoDB.
+- **Authentication**: Amazon Cognito via `react-oidc-context`.
+- **Database**: Direct DynamoDB access through the AWS SDK.
+- **Quoting workflow**: Cost models for materials, operations, outsourcing, setup, wastage, overhead, and quote generation.
 
-## Deploying to AWS
+## Deployment
 
-For detailed instructions on deploying your application, refer to the [deployment section](https://docs.amplify.aws/react/start/quickstart/#deploy-a-fullstack-app-to-aws) of our documentation.
+Amplify Hosting builds the frontend using `amplify.yml`. There is no Amplify-managed backend definition in this repository.
 
 ## Security
 
@@ -24,6 +24,8 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 
 This library is licensed under the MIT-0 License. See the LICENSE file.
 
-## Local
-npm run dev
+## Local Development
 
+```sh
+npm run dev
+```
